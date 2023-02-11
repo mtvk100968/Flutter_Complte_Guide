@@ -20,6 +20,28 @@ class MyApp extends StatefulWidget {
 // means Cant be used this class from anywhere else
 
 class _MyAppState extends State<MyApp> {
+  final questions = const [
+    {
+      'questionText': 'What\'s your favourite Color?',
+      'answers': ['Black', 'Red', 'Green', 'White'],
+    },
+    {
+      'questionText': 'What\'s your favourite Animal?',
+      'answers': ['Lion', 'Rabbit', 'Peacock', 'Hen'],
+    },
+    {
+      'questionText': 'What\'s your favourite Phone?',
+      'answers': ['Iphone', 'Samsung', 'MI', 'Motorola'],
+    },
+    {
+      'questionText': 'What\'s your favourite Phone?',
+      'answers': ['Iphone', 'Samsung', 'MI', 'Motorola'],
+    },
+    {
+      'questionText': 'What\'s your favourite Animal?',
+      'answers': ['Lion', 'Rabbit', 'Peacock', 'Hen'],
+    },
+  ];
   var _questionIndex = 0;
 
   void _answerQuestion() {
@@ -27,69 +49,45 @@ class _MyAppState extends State<MyApp> {
       _questionIndex = _questionIndex + 1;
     });
     print(_questionIndex);
+
+    if (_questionIndex < questions.length) {
+      print('We have more questions!');
+    } else {
+      print('No more questions!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        'questionText': 'What\'s your favourite Color?',
-        'answers': ['Black', 'Red', 'Green', 'White'],
-      },
-      {
-        'questionText': 'What\'s your favourite Animal?',
-        'answers': ['Lion', 'Rabbit', 'Peacock', 'Hen'],
-      },
-      {
-        'questionText': 'What\'s your favourite Phone?',
-        'answers': ['Iphone', 'Samsung', 'MI', 'Motorola'],
-      },
-    ];
+    //during comilation error will come as
+    //Unsupported operation Cannot add to an
+    //unmodified list for keeping const before Hello.
+    //var dummy = const ['Hello'];
+    //dummy.add('Max');
+    //print(dummy);
+    // questions = []; does not work if questions is const
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('My First App'),
         ),
-        body: Column(
-          children: [
-            // Question function called
-            Question(
-              questions[_questionIndex]['questionText'],
-            ),
-            ...(questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList()
-
-            //Answer(_answerQuestion),
-            //Answer(_answerQuestion),
-            //Answer(_answerQuestion),
-
-            //ElevatedButton(
-            // child: Text('Answer 2'),
-            //  onPressed: () => print('Answer 2 Chooosen!'),
-            //),
-
-            // Elivated button Not working but excuted
-            //ElevatedButton(
-            //  child: Text('Answer null'),
-            //  //onPressed: null is not working
-            //  //onPressed: null,
-            //  onPressed: () {
-            //    //......
-            //    print('Answer NULL Choooooosen!');
-            //  },
-            //),
-
-            //ElevatedButton(
-            //  child: Text('Answer 3'),
-            //  onPressed: () {
-            //......
-            //    print('Answer 3 Choooooosen!');
-            //  },
-            //),
-          ],
-        ),
+        body: _questionIndex < questions.length
+            ? Column(
+                children: [
+                  // Question function called
+                  Question(
+                    questions[_questionIndex]['questionText'] as String,
+                  ),
+                  ...(questions[_questionIndex]['answers'] as List<String>)
+                      .map((answer) {
+                    return Answer(_answerQuestion, answer);
+                  }).toList()
+                ],
+              )
+            : Center(
+                child: Text('You did it!'),
+              ),
       ),
     );
   }
